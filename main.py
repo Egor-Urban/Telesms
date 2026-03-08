@@ -8,26 +8,46 @@ import logging
 import config
 import logger
 
-from hydrogram import Client
+
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
+
+from hydrogram import Client, filters, idle
 
 
 
+app = Client("Telesms", api_id=config.APP_API_ID, api_hash=config.APP_API_HASH)
+
+
+
+# LISTENERs
+
+@app.on_message(filters.private)
+async def hello(client, message):
+    
+    await message.reply("Hello")
+
+
+
+# MAIN
 async def main():
-    app = Client("Telesms", api_id=config.APP_API_ID, api_hash=config.APP_API_HASH)
+    await app.start()
 
-    async with app:
-        me = await app.get_me()
-        log.info(f"Succesfully login: {me.first_name} (@{me.username})")
+    me = await app.get_me()
+    log.info(f"Succesfully login: {me.first_name} (@{me.username})")
 
-        await app.send_message("me", "[Telesms] Userbot started")
-        log.info("Test init msg sent")
+    await idle()
+    await app.stop()
 
+
+
+# ENTRY POINT
 if __name__ == "__main__":
     logger.setup_logging()
     log = logging.getLogger()
-    log.info(f"Starting {config.APP_TITLE}")
 
     try:
-        asyncio.run(main())
+        loop.run_until_complete(main())
     except KeyboardInterrupt:
         log.info("Stopped by user")
