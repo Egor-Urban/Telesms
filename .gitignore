@@ -1,0 +1,6 @@
+config.py
+Telesms.session
+/qr-Pyrogram-session
+/.venv
+/__pycache__
+/logs
