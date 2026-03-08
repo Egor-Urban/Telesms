@@ -1,6 +1,9 @@
 config.py
 Telesms.session
+Telesms.session-shm
+Telesms.session-wal
 /qr-Pyrogram-session
 /.venv
 /__pycache__
+/Telegram/__pycache__
 /logs

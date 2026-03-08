@@ -4,6 +4,7 @@
 
 import asyncio
 import logging
+import threading
 
 import config
 import logger
@@ -11,22 +12,14 @@ import logger
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
+from hydrogram import Client, idle
 
-
-from hydrogram import Client, filters, idle
+from Telegram.output_handler import output
+from Telegram.input_handler import _input
 
 
 
 app = Client("Telesms", api_id=config.APP_API_ID, api_hash=config.APP_API_HASH)
-
-
-
-# LISTENERs
-
-@app.on_message(filters.private)
-async def hello(client, message):
-    
-    await message.reply("Hello")
 
 
 
@@ -36,6 +29,12 @@ async def main():
 
     me = await app.get_me()
     log.info(f"Succesfully login: {me.first_name} (@{me.username})")
+
+    output(app, log)
+
+    input_thread = threading.Thread(target=_input, args=(app, loop, log))
+    input_thread.start()
+
 
     await idle()
     await app.stop()
