@@ -1,10 +1,15 @@
+# ./Telegram/output_handler.py
+
+
+
 from hydrogram import Client, filters
 
 
-def output(app, log):
 
+def output(app, log):
     def get_caption(message):
         return message.caption if message.caption else ""
+
 
     @app.on_message(filters.private)
     async def log_message(client, message):
@@ -38,6 +43,8 @@ def output(app, log):
         else:
             log.info(f"Other message from [{username}::{user.id}] ({message.id})")
 
+
+    
 
     @app.on_edited_message(filters.private)
     async def log_edited(client, message):

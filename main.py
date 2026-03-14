@@ -22,7 +22,6 @@ from Telegram.input_handler import _input
 app = Client("Telesms", api_id=config.APP_API_ID, api_hash=config.APP_API_HASH)
 
 
-
 # MAIN
 async def main():
     await app.start()
